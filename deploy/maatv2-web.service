@@ -12,7 +12,7 @@ WorkingDirectory=/opt/maatv2
 Environment=NODE_ENV=production
 Environment=PORT=3200
 EnvironmentFile=/etc/maatv2/maat.env
-ExecStart=/usr/bin/node /opt/maatv2/node_modules/next/dist/bin/next start -p 3200
+ExecStart=/usr/bin/node /opt/maatv2/node_modules/next/dist/bin/next start --hostname 127.0.0.1 -p 3200
 Restart=always
 RestartSec=3
 TimeoutStopSec=20
