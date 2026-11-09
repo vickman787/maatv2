@@ -3,10 +3,16 @@
 # Requires MAAT_HOST and explicit deployment authorization. Review before use.
 set -euo pipefail
 
+# V2 deployment is gated until capacity and authentication are verified.
+if [ "${MAATV2_DEPLOY_READY:-}" != "yes" ]; then
+  echo "V2 deployment not ready. Complete DEPLOYMENT.md before enabling." >&2
+  exit 1
+fi
+
 : "${MAAT_HOST:?Set MAAT_HOST to the authorized SSH target, e.g. maat@203.0.113.10}"
-REMOTE_DIR="${REMOTE_DIR:-/opt/maat}"
-SERVICE_WEB="${SERVICE_WEB:-maat-web}"
-SERVICE_WORKER="${SERVICE_WORKER:-maat-worker}"
+REMOTE_DIR="${REMOTE_DIR:-/opt/maatv2}"
+SERVICE_WEB="${SERVICE_WEB:-maatv2-web}"
+SERVICE_WORKER="${SERVICE_WORKER:-maatv2-worker}"
 
 # NEXT_PUBLIC_PRIVY_APP_ID is compiled into the browser bundle. Keep this public ID
 # available during the local production build; all secrets remain on the VM.
@@ -29,11 +35,11 @@ rsync -az --delete \
   ./ "${MAAT_HOST}:${REMOTE_DIR}/"
 
 echo "==> Installing Linux dependencies and applying migrations"
-ssh "${MAAT_HOST}" "sudo -u maat bash -lc '
+ssh "${MAAT_HOST}" "sudo -u maatv2 bash -lc '
   set -euo pipefail
   cd ${REMOTE_DIR}
   corepack pnpm install --frozen-lockfile
-  set -a; . /etc/maat/maat.env; set +a
+  set -a; . /etc/maatv2/maat.env; set +a
   corepack pnpm exec tsx scripts/backup.ts
   corepack pnpm exec tsx scripts/migrate.ts
 '"
@@ -41,7 +47,7 @@ ssh "${MAAT_HOST}" "sudo -u maat bash -lc '
 echo "==> Restarting services"
 ssh "${MAAT_HOST}" "sudo systemctl restart ${SERVICE_WEB} ${SERVICE_WORKER} && sleep 2 && sudo systemctl --no-pager --lines=20 status ${SERVICE_WEB} ${SERVICE_WORKER}"
 
-echo "==> Health check (requires APP_URL in /etc/maat/maat.env)"
-ssh "${MAAT_HOST}" "set -a; . /etc/maat/maat.env; set +a; curl -fsS \"\${APP_URL}/api/health\""
+echo "==> Health check (requires APP_URL in /etc/maatv2/maat.env)"
+ssh "${MAAT_HOST}" "set -a; . /etc/maatv2/maat.env; set +a; curl -fsS \"\${APP_URL}/api/health\""
 
 echo "Deployment commands completed. Verify the public workflow manually before marking it complete."

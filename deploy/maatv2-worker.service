@@ -1,17 +1,17 @@
 [Unit]
 Description=Ma'at reconciliation job worker
-Documentation=https://github.com/your-org/maat
-After=network-online.target maat-web.service
+Documentation=https://github.com/vickman787/maatv2
+After=network-online.target maatv2-web.service
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=maat
-Group=maat
-WorkingDirectory=/opt/maat
+User=maatv2
+Group=maatv2
+WorkingDirectory=/opt/maatv2
 Environment=NODE_ENV=production
-EnvironmentFile=/etc/maat/maat.env
-ExecStart=/usr/bin/node /opt/maat/node_modules/tsx/dist/cli.mjs /opt/maat/worker/main.ts
+EnvironmentFile=/etc/maatv2/maat.env
+ExecStart=/usr/bin/node /opt/maatv2/node_modules/tsx/dist/cli.mjs /opt/maatv2/worker/main.ts
 Restart=always
 RestartSec=5
 TimeoutStopSec=30
@@ -20,7 +20,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/maat/data
+ReadWritePaths=/opt/maatv2/data
 UMask=0027
 LimitNOFILE=4096
 

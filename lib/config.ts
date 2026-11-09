@@ -29,12 +29,12 @@ export function envInt(name: string, fallback: number): number {
 }
 
 export function appUrl(): string {
-  return env("APP_URL", "http://localhost:3000").replace(/\/+$/, "");
+  return env("APP_URL", "http://localhost:3200").replace(/\/+$/, "");
 }
 
 export function databaseFile(): string {
   loadLocalEnv();
-  const raw = process.env.DATABASE_URL ?? "file:./data/maat.db";
+  const raw = process.env.DATABASE_URL ?? "file:./data/maatv2.db";
   const withoutScheme = raw.startsWith("file:") ? raw.slice(5) : raw;
   return path.isAbsolute(withoutScheme)
     ? withoutScheme

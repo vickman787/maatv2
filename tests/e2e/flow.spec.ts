@@ -1,4 +1,4 @@
-﻿import { expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { request as playwrightRequest } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
@@ -123,7 +123,7 @@ test("private workspace walkthrough: review, confirm, export, undo, refresh, log
   await page.goto("/dashboard");
   await page.getByLabel("Open profile menu").click();
   await page.getByRole("button", { name: "Sign out" }).first().click();
-  await page.waitForURL("http://localhost:3000/login");
+  await page.waitForURL("http://localhost:3201/login");
   await context.clearCookies();
 });
 
@@ -135,7 +135,7 @@ test("real CSV upload validates, matches, persists, and rejects cross-workspace 
 
   await context.addCookies([
     {
-      name: "maat_session",
+      name: "maatv2_session",
       value: account.token,
       domain: "localhost",
       path: "/",
@@ -164,8 +164,8 @@ test("real CSV upload validates, matches, persists, and rejects cross-workspace 
   await expect(page.getByText("INV-001").first()).toBeVisible();
 
   const otherContext = await playwrightRequest.newContext({
-    baseURL: "http://localhost:3000",
-    extraHTTPHeaders: { Cookie: `maat_session=${other.token}` },
+    baseURL: "http://localhost:3201",
+    extraHTTPHeaders: { Cookie: `maatv2_session=${other.token}` },
   });
   const crossExport = await otherContext.get(`/api/batches/${batchId}/export/invoices`);
   expect([403, 404]).toContain(crossExport.status());
@@ -188,8 +188,8 @@ test("real CSV upload validates, matches, persists, and rejects cross-workspace 
   await otherContext.dispose();
 
   const ownContext = await playwrightRequest.newContext({
-    baseURL: "http://localhost:3000",
-    extraHTTPHeaders: { Cookie: `maat_session=${account.token}` },
+    baseURL: "http://localhost:3201",
+    extraHTTPHeaders: { Cookie: `maatv2_session=${account.token}` },
   });
   const ownExport = await ownContext.get(`/api/batches/${batchId}/export/invoices`);
   expect(ownExport.status()).toBe(200);
@@ -202,7 +202,7 @@ test("upload validation shows exact row and column errors", async ({ page, conte
   db.close();
   await context.addCookies([
     {
-      name: "maat_session",
+      name: "maatv2_session",
       value: account.token,
       domain: "localhost",
       path: "/",

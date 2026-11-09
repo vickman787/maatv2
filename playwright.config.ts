@@ -10,7 +10,7 @@ try {
 
 process.env.DATABASE_URL = "file:./data/e2e.db";
 process.env.UPLOAD_DIR = "./data/e2e-uploads";
-process.env.APP_URL = "http://localhost:3000";
+process.env.APP_URL = "http://localhost:3201";
 process.env.AI_API_KEY = ""; // Browser regression fixtures use deterministic evidence; live AI is verified separately.
 
 export default defineConfig({
@@ -21,7 +21,7 @@ export default defineConfig({
   expect: { timeout: 20000 },
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3201",
     channel: "chrome",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
@@ -29,14 +29,14 @@ export default defineConfig({
   },
   webServer: {
     command: "node scripts/e2e-server.mjs",
-    url: "http://localhost:3000/api/health",
-    reuseExistingServer: true,
+    url: "http://localhost:3201/api/health",
+    reuseExistingServer: false,
     timeout: 180000,
     env: {
       ...process.env,
       DATABASE_URL: "file:./data/e2e.db",
       UPLOAD_DIR: "./data/e2e-uploads",
-      APP_URL: "http://localhost:3000",
+      APP_URL: "http://localhost:3201",
     },
   },
 });

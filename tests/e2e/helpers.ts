@@ -29,7 +29,7 @@ export async function addSessionCookie(
 ): Promise<void> {
   await context.addCookies([
     {
-      name: "maat_session",
+      name: "maatv2_session",
       value: token,
       domain: "localhost",
       path: "/",

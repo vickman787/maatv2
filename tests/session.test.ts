@@ -6,7 +6,7 @@ describe("signed sessions", () => {
     const token = signSession({ kind: "user", userId: "u1", workspaceId: "w1" }, 60);
     const parsed = verifySessionToken(token);
     expect(parsed).toMatchObject({ kind: "user", userId: "u1", workspaceId: "w1" });
-    expect(SESSION_COOKIE).toBe("maat_session");
+    expect(SESSION_COOKIE).toBe("maatv2_session");
   });
 
   it("round-trips a demo session", () => {

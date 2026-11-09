@@ -1,16 +1,16 @@
 # Caddy reverse proxy for Ma'at.
-# Install to /etc/caddy/Caddyfile and set MAAT_DOMAIN in /etc/caddy/maat.env
+# Install to /etc/caddy/Caddyfile and set MAATV2_DOMAIN in /etc/caddy/maatv2.env
 # (or the Caddy service environment). Never serve the app over bare HTTP in production.
 #
-# Example: MAAT_DOMAIN=maat.example.com
+# Example: MAATV2_DOMAIN=maatv2.example.com
 
-{$MAAT_DOMAIN} {
+{$MAATV2_DOMAIN} {
 	encode zstd gzip
 	request_body {
 		max_size 12MB
 	}
 
-	reverse_proxy 127.0.0.1:3000 {
+	reverse_proxy 127.0.0.1:3200 {
 		health_uri /api/health
 		health_interval 30s
 		health_timeout 5s
@@ -26,7 +26,7 @@
 	}
 
 	log {
-		output file /var/log/caddy/maat-access.log {
+		output file /var/log/caddy/maatv2-access.log {
 			roll_size 10MiB
 			roll_keep 5
 		}

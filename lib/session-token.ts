@@ -1,4 +1,4 @@
-﻿import crypto from "node:crypto";
+import crypto from "node:crypto";
 import type { Session } from "./types";
 import { appUrl, env } from "./config";
 
@@ -60,7 +60,7 @@ export function verifySessionToken(token: string | undefined | null): Session | 
   }
 }
 
-export const SESSION_COOKIE = "maat_session";
+export const SESSION_COOKIE = "maatv2_session";
 
 export function sessionCookieOptions(maxAgeSeconds?: number) {
   return {

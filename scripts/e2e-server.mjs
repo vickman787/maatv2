@@ -5,7 +5,7 @@ const nextBin = path.resolve("node_modules", "next", "dist", "bin", "next");
 const tsxBin = path.resolve("node_modules", "tsx", "dist", "cli.mjs");
 
 const children = [
-  spawn(process.execPath, [nextBin, "start", "-p", "3000"], { stdio: "inherit" }),
+  spawn(process.execPath, [nextBin, "start", "-p", "3201"], { stdio: "inherit" }),
   spawn(process.execPath, [tsxBin, "worker/main.ts"], { stdio: "inherit" }),
 ];
 

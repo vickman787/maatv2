@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {chromium,expect} from '@playwright/test';
-const origin=process.argv[2]||'https://199-247-1-174.sslip.io';
+const origin=process.argv[2]||'http://localhost:3200';
 const browser=await chromium.launch({channel:'chrome',headless:true});
 try {
  const context=await browser.newContext(); const page=await context.newPage();

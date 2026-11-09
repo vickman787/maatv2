@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {expect} from '@playwright/test';
-const origin='https://199-247-1-174.sslip.io';
+const origin='http://localhost:3200';
 const root=path.resolve('data/demo-video-work');
 const scenes=[];
 const save=()=>fs.writeFileSync(path.join(root,'capture.json'),JSON.stringify({origin,clock:'anchored immediately before page creation; verify source frames before editing',scenes},null,2));

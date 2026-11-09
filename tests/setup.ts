@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), "maat-test-"));
-process.env.APP_URL = "http://localhost:3000";
+process.env.APP_URL = "http://localhost:3201";
 process.env.SESSION_SECRET = "test-session-secret-0123456789abcdef0123456789abcdef";
 process.env.PRIVY_APP_ID = "test-app-id";
 process.env.DATABASE_URL = `file:${path.join(root, "test.db")}`;
