@@ -246,4 +246,3 @@ the schema changed, then restart both units.
 - Rotate the session secret only with a planned re-login of all users.
 - Demo workspaces expire after 24 hours; source files are removed with the workspace on cleanup.
 - Never publish the submission or provision paid infrastructure without owner authorization.
-
