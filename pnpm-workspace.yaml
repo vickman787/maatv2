@@ -6,3 +6,6 @@ allowBuilds:
   bufferutil: false
   keccak: false
   utf-8-validate: false
+# Privy's broad optional peer range otherwise selects Kit 5 for Kit 8 program clients.
+overrides:
+  '@privy-io/react-auth>@solana/kit': '8.6.0'

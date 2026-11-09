@@ -25,11 +25,13 @@ V1 at `10eb8c5` is already submitted elsewhere. This separate repository preserv
 - [x] Read-only VPS capacity assessment and isolated deployment templates.
 - [x] Create the private `vickman787/maatv2` GitHub remote.
 - [x] Install dependencies; 57 tests and TypeScript checks pass. Initialize a fresh V2 database.
-- [ ] Choose and validate an Agent-Native server integration compatible with the existing app; a sidebar alone is insufficient.
-- [ ] Implement typed shared actions with server-owned identity, runtime input validation and workspace authorization.
-- [ ] Add the agent conversation and selected-row context; persist review proposals alongside the existing data.
-- [ ] Verify real provider/tool orchestration, access boundaries and explicit confirmation end to end.
-- [ ] Test production build, desktop/mobile flow and independent deployment capacity.
+- [x] Embed Agent-Native actions and its supported AI SDK engine in the existing Next.js server. Installed engine/provider adapter contract test passes; see AGENT_NATIVE_INTEGRATION.md.
+- [x] Implement typed shared actions with server-owned identity, runtime input validation and workspace authorization.
+- [x] Add invoice-scoped conversations, selected-row context, action outcomes and persisted review proposals with human amount edits, rejection and confirmation.
+- [x] Verify live provider/tool orchestration: pnpm verify:agent passed on November 9, 2026 with the configured Vultr provider. All three actions succeeded, one proposal was saved and confirmed totals remained unchanged in isolated fixture records.
+- [x] Verify production-served desktop/mobile review flow and the original reconciliation walkthrough against isolated fixtures.
+- [x] Complete the production build and dependency tracing for the full-install server deployment.
+- [ ] Assess independent deployment capacity and verify a separate V2 hostname/auth origin before deployment.
 - [ ] Record a new public Clips walkthrough and disclose the inherited V1 foundation.
 - [ ] Submit and verify receipt.
 

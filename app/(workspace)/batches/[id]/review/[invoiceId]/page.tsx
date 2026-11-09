@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -12,6 +12,9 @@ import { requireWorkspaceContext } from "@/lib/auth";
 import { getReviewData } from "@/lib/review";
 import { getDb } from "@/lib/db";
 import { formatMoney } from "@/lib/money";
+import { AgentInvestigator } from "@/components/AgentInvestigator";
+import { getInvestigation } from "@/lib/agent/store";
+import { aiConfig } from "@/lib/config";
 import { ReviewForm } from "@/components/ReviewForm";
 import { Stepper } from "@/components/Stepper";
 import { ReviewFlag, StatusPill } from "@/components/StatusPill";
@@ -125,6 +128,9 @@ export default async function ReviewPage({
         </a>)}
       </div>
 
+      <AgentInvestigator key={invoice.id} batchId={id} invoiceRowId={invoice.id} invoiceLabel={invoice.invoiceId}
+        currency={invoice.currency} initial={{ ...getInvestigation(db, ctx, { batchId: id, invoiceRowId: invoice.id }), configured: aiConfig().configured }}
+        />
       <div className="review-grid">
         <div className="stack">
           <section className="panel">
@@ -392,6 +398,3 @@ export default async function ReviewPage({
     </>
   );
 }
-
-
-

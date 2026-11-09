@@ -220,4 +220,30 @@ CREATE TABLE IF NOT EXISTS rate_limits (
 );
 `;
 
-export const MIGRATIONS: Migration[] = [{ version: 1, name: "initial", sql: V1 }];
+
+const V2_AGENT = `
+CREATE TABLE agent_runs (
+ id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+ batch_id TEXT NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
+ invoice_row_id TEXT NOT NULL REFERENCES invoice_rows(id) ON DELETE CASCADE,
+ user_id TEXT REFERENCES users(id) ON DELETE SET NULL, question TEXT NOT NULL, response TEXT,
+ status TEXT NOT NULL CHECK(status IN ('running','completed','failed')), model TEXT NOT NULL,
+ events_json TEXT NOT NULL DEFAULT '[]', created_at TEXT NOT NULL, finished_at TEXT, expires_at TEXT NOT NULL
+);
+CREATE INDEX idx_agent_runs_invoice ON agent_runs(workspace_id, batch_id, invoice_row_id, created_at);
+CREATE UNIQUE INDEX idx_agent_runs_active ON agent_runs(workspace_id, invoice_row_id) WHERE status = 'running';
+CREATE TABLE agent_proposals (
+ id TEXT PRIMARY KEY, run_id TEXT NOT NULL REFERENCES agent_runs(id) ON DELETE CASCADE,
+ workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+ batch_id TEXT NOT NULL REFERENCES batches(id) ON DELETE CASCADE,
+ invoice_row_id TEXT NOT NULL REFERENCES invoice_rows(id) ON DELETE CASCADE,
+ payment_row_id TEXT REFERENCES payment_rows(id) ON DELETE CASCADE, amount_minor INTEGER,
+ rationale TEXT NOT NULL, evidence_json TEXT NOT NULL, assumptions_json TEXT NOT NULL, questions_json TEXT NOT NULL,
+ snapshot TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','confirmed','rejected')),
+ created_at TEXT NOT NULL, decided_at TEXT, decided_by_user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+ allocation_id TEXT, decision_note TEXT, decided_amount_minor INTEGER
+);
+CREATE INDEX idx_agent_proposals_invoice ON agent_proposals(workspace_id, batch_id, invoice_row_id, created_at);
+`;
+
+export const MIGRATIONS: Migration[] = [{ version: 1, name: 'initial', sql: V1 }, { version: 2, name: 'agent_investigations', sql: V2_AGENT }];
