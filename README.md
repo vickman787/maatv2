@@ -2,7 +2,7 @@
 
 Separate development version of [Ma'at](https://github.com/vickman787/maat), prepared for the Builder.io Agent-Native Hackathon.
 
-**Status:** V2 now embeds Agent-Native shared actions and its supported provider engine, with invoice-scoped conversations, persisted proposals and explicit human review. Live-provider verification passed; V2 deployment and a new public Clips demonstration remain pending. The original Ma'at URL is the submitted V1 app.
+**Status:** V2 embeds Agent-Native shared actions and its supported provider engine, with invoice-scoped conversations, persisted proposals and explicit human review. It is deployed at [maatv2.199-247-1-174.sslip.io](https://maatv2.199-247-1-174.sslip.io); the production Privy origin, email OTP sign-in and onboarding are verified. A new public Clips demonstration remains pending. The original Ma'at URL is the submitted V1 app.
 
 ## Local setup
 

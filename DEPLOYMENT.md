@@ -1,21 +1,24 @@
 # Ma'at V2 deployment status
 
-Not deployed. The existing https://199-247-1-174.sslip.io site, `/opt/maat`, `/etc/maat`, and `maat-web` / `maat-worker` services belong to V1 and must remain unchanged.
+Deployed on November 9, 2026 at **https://maatv2.199-247-1-174.sslip.io**. Caddy obtained a Let's Encrypt certificate and proxies to V2 on loopback port 3200. The original V1 route remains at https://199-247-1-174.sslip.io.
 
-## Read-only capacity check, November 9, 2026
+## Capacity assessment
 
-The existing VM reports 955 MB total RAM, 393 MB available RAM, 2,399 MB swap (81 MB used), and approximately 13 GB free disk. V1 web and worker were active. This snapshot does not establish safe capacity for an additional Agent-Native runtime under load.
+Before deployment, the 1 GB VM reported 955 MiB RAM, 389 MiB available, 2.3 GiB swap (81 MiB used), and 13 GiB free disk. V1 web, worker, and Caddy were active.
 
-Build locally first. Measure the actual V2 runtime footprint before choosing same-VM hosting or increasing capacity. Do not build a second Next.js application on this 1 GB VM while V1 is serving judges.
+After V2 web and worker started, the observed idle footprint was about 164 MiB web and 55 MiB worker (peaks 175 MiB and 61 MiB). The latest snapshot reported 291 MiB available, 257 MiB swap used, and 9.5 GiB free disk; both public health checks passed. Memory pressure remains unverified under meaningful traffic, so this shared 1 GB host is a low-traffic deployment, not a load-capacity claim. Consider a 2 GB plan before sustained usage.
 
-## Isolated deployment requirements
+Systemd protects the V1 app from unbounded V2 growth with V2-only limits: web `MemoryHigh=288M`, `MemoryMax=320M`, `MemorySwapMax=128M`; worker `MemoryHigh=112M`, `MemoryMax=144M`, `MemorySwapMax=64M`.
 
-- Separate system user `maatv2`, `/opt/maatv2`, `/etc/maatv2/maat.env`, database and uploads.
-- Independent `maatv2-web` and `maatv2-worker` services; web port 3200, never port 3000.
-- A separate hostname, HTTPS configuration and Privy allowed origin. No hostname is provisioned yet.
-- A newly generated production session secret. Never reuse V1's session secret or database.
-- Service and reverse-proxy validation, backup, health checks and memory monitoring before public access.
+## V1/V2 isolation
 
-The inherited deployment script now defaults to V2 paths and is gated by `MAATV2_DEPLOY_READY=yes`; do not enable that gate until this checklist is complete. The systemd templates are preparation only, not proof of a working deployment. The embedded Agent-Native runtime uses the existing web service and provider settings; no separate agent server is required. Use Node.js 22.22 or later and install the complete dependency tree with the frozen lockfile before starting Next.js. Default output tracing excludes the framework package because this is a full-install server deployment; standalone packaging remains unverified. See docs/AGENT_NATIVE_INTEGRATION.md.
+- V2 runs as `maatv2` from `/opt/maatv2`; its private database and uploads are `/opt/maatv2/data/maatv2.db` and `/opt/maatv2/data/uploads`.
+- `/etc/maatv2/maat.env` is owned `root:maatv2`, mode `0640`. It has V2's newly generated session secret and provider configuration; secret values are not in Git.
+- `maatv2-web` and `maatv2-worker` are enabled and active. The web listener is `127.0.0.1:3200` only.
+- `/etc/caddy/maatv2.caddy` adds the V2 HTTPS site; `/etc/caddy/Caddyfile` imports it. The original V1 site block is preserved in place and backed up at `/etc/caddy/Caddyfile.pre-maatv2`.
+- V1's `/opt/maat`, `/etc/maat`, port 3000, database, `maat-web` and `maat-worker` remain unchanged and active.
+- Privy's Web & mobile web allowed origin `https://maatv2.199-247-1-174.sslip.io` was checked in the production browser: the Privy app configuration returned HTTP 200 and the email OTP input opened. The owner completed production email OTP sign-in and onboarding; V2 recorded `/api/auth/sync` 200, `/api/onboarding` 200, and `/dashboard` 200. Its isolated database contains one user, one workspace, and no batches.
+
+The V2 production build was made locally. The VPS received the build artifact and installed the frozen dependency tree; no Next.js build ran on the 1 GB server. The full-install `next start` mode is used; standalone packaging remains unverified. See docs/AGENT_NATIVE_INTEGRATION.md.
 
 Historical V1 operations are preserved for reference in `docs/MAAT_V1_DEPLOYMENT.md`.

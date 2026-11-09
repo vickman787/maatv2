@@ -20,7 +20,7 @@ Use `.env.local` with V2's database, session secret and port. Set `AI_BASE_URL`,
 
 Run `pnpm migrate`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, then `pnpm test:e2e`. Browser tests use a separate database on port 3201 and fixture proposals; provider traffic is disabled there. `tests/agent.test.ts` exercises the installed Agent-Native engine and SDK against simulated provider streams as well as access, schema, orchestration, interrupted-run and human-review boundaries.
 
-Live-provider verification passed in isolation; V2 hosting capacity, public deployment and a new Clips recording remain distinct release gates. Do not present simulated provider tests as a live Vultr verification, or inherited V1 screenshots as V2 evidence.
+Live-provider verification passed in isolation. V2 is deployed at `https://maatv2.199-247-1-174.sslip.io`; the production Privy origin, owner email OTP sign-in and onboarding are verified (`/api/auth/sync`, `/api/onboarding` and `/dashboard` returned 200). The 1 GB VPS has service memory caps, but load capacity is unverified. A new Clips recording remains a separate release gate. Do not present simulated provider tests as a live Vultr verification, or inherited V1 screenshots as V2 evidence.
 
 Run `pnpm verify:agent` after setting credentials to exercise real tool orchestration against isolated in-memory fixture records. It checks that a proposal is saved without allocating; it never uses the application database or account records.
 

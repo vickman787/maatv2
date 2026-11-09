@@ -31,7 +31,8 @@ V1 at `10eb8c5` is already submitted elsewhere. This separate repository preserv
 - [x] Verify live provider/tool orchestration: pnpm verify:agent passed on November 9, 2026 with the configured Vultr provider. All three actions succeeded, one proposal was saved and confirmed totals remained unchanged in isolated fixture records.
 - [x] Verify production-served desktop/mobile review flow and the original reconciliation walkthrough against isolated fixtures.
 - [x] Complete the production build and dependency tracing for the full-install server deployment.
-- [ ] Assess independent deployment capacity and verify a separate V2 hostname/auth origin before deployment.
+- [x] Deploy to an isolated V2 user, paths, database, uploads, services and HTTPS hostname; verify the separate Privy origin and public health checks. The 1 GB host is memory-capped for V2; see DEPLOYMENT.md.
+- [x] Complete owner email OTP sign-in and onboarding on the V2 production origin; `/api/auth/sync`, `/api/onboarding` and `/dashboard` returned 200.
 - [ ] Record a new public Clips walkthrough and disclose the inherited V1 foundation.
 - [ ] Submit and verify receipt.
 
